@@ -25,17 +25,17 @@ The type Program achieves this by having an equality constraint on its construct
 
 Here is the definition.
 
-```haskell
-data Program :: [Attribute] -> [Uniform] -> [Varying] -> * where
-  Program :: (((InsertionSort v_output) :==: (InsertionSort s_input)) ~ 'True) 
-          => Sing ('VertexShader a xs v_output) 
-          -> Sing ('FragmentShader s_input ys) 
-          -> Program a (xs :++ ys) v_output
+```
+    data Program :: [Attribute] -> [Uniform] -> [Varying] -> * where
+        Program :: (((InsertionSort v_output) :==: (InsertionSort s_input)) ~ 'True) 
+                => Sing ('VertexShader a xs v_output) 
+                -> Sing ('FragmentShader s_input ys) 
+                -> Program a (xs :++ ys) v_output
 ```
 
 So the following will compile.
 
-```haskell
+```
     testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': ('[] :: [Varying])))
     testVertexShader1 = sing
     
@@ -47,7 +47,7 @@ So the following will compile.
 
 However, if the types don't match you get compile time error.
 
-```haskell
+```
     testFragmentShader2 :: Sing ('FragmentShader ('Varying Color VInt ': ('[] :: [Varying])) '[])
     testFragmentShader2 = sing
     
