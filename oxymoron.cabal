@@ -1,0 +1,53 @@
+name:     oxymoron
+version:  0.1.0.0
+synopsis: Safe OpenGL
+description: Oxymoron is proof of concept library for writing safe(r) OpenGL code.
+    . By harnessing the power of singleton types, Oxymoron provides a description 
+    . GLSL programming that, could be, correct by construction (I haven't added all 
+    . of the OpenGL enumeration and checks yet).
+    . Thus, at this early stage, it is not useful for anything other then discussion.
+    .
+    . In the future, perhaps tomorrow (there is always tomorrow), I will show how the 
+    . actually useful types can be derived automatically from the descriptions using
+    . type families. 
+    .
+    . I wish list for this library. If you are type magican, I could use suggestions
+    . on how to clean up the equality constraints. 
+    . If you are an OpenGL hacker, I need help flesh out the enumerations and 
+    . coming up with more invariants that can be checked.
+
+homepage: http://github.com/jfischoff/oxymoron
+license:             BSD3
+license-file:        LICENSE
+author:              Jonathan Fischoff
+maintainer:          jonathangfischoff@gmail.com
+category:            Graphics
+build-type:          Simple
+cabal-version:       >=1.8
+
+library
+  exposed-modules: Oxymoron,
+                   Oxymoron.Description
+  
+  other-modules: Oxymoron.Description.Attribute,
+                    Oxymoron.Description.FragmentShader, 
+                    Oxymoron.Description.Image, 
+                    Oxymoron.Description.Material, 
+                    Oxymoron.Description.Mesh, 
+                    Oxymoron.Description.Program, 
+                    Oxymoron.Description.Renderable, 
+                    Oxymoron.Description.Symbol, 
+                    Oxymoron.Description.Uniform, 
+                    Oxymoron.Description.Varying, 
+                    Oxymoron.Description.VertexShader
+  
+  build-depends: base ==4.6.*, 
+                 singletons ==0.8.*, 
+                 template-haskell ==2.8.*, 
+                 OpenGLRaw ==1.2.*, 
+                 repa ==3.2.*, 
+                 word24 ==1.0.*, 
+                 language-glsl ==0.0.*
+
+  hs-source-dirs:      src
+  
