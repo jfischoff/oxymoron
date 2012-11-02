@@ -19,10 +19,12 @@ testFragmentShader0 = sing
 
 testProgram0 = Program testVertexShader0 testFragmentShader0
 
-testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': ('[] :: [Varying])))
+testVertexShader1 :: Sing ('VertexShader '[] '[] 
+    ('Varying Color VFloat ': 'Varying Position VInt ': ('[] :: [Varying])))
 testVertexShader1 = sing
 
-testFragmentShader1 :: Sing ('FragmentShader ('Varying Color VFloat ': ('[] :: [Varying])) '[])
+testFragmentShader1 :: Sing ('FragmentShader 
+    ('Varying Position VInt ': 'Varying Color VFloat ': ('[] :: [Varying])) '[])
 testFragmentShader1 = sing
 
 testProgram1 = Program testVertexShader1 testFragmentShader1
@@ -30,7 +32,8 @@ testProgram1 = Program testVertexShader1 testFragmentShader1
 testVertexShader2 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': ('[] :: [Varying])))
 testVertexShader2 = sing
 
-testFragmentShader2 :: Sing ('FragmentShader ('Varying Color VInt ': ('[] :: [Varying])) '[])
+testFragmentShader2 :: Sing ('FragmentShader 
+    ('Varying Position VInt ': 'Varying Color VInt ': ('[] :: [Varying])) '[])
 testFragmentShader2 = sing
 
 --testProgram2 = Program testVertexShader1 testFragmentShader2

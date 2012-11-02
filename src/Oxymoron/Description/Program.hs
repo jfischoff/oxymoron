@@ -7,7 +7,7 @@ import Data.Singletons
 import Oxymoron.Description.VertexShader
 import Oxymoron.Description.FragmentShader
 import Oxymoron.Description.Varying 
-import Oxymoron.Description.Attribute (Attribute(..), Color(..))
+import Oxymoron.Description.Attribute (Attribute(..))
 import Oxymoron.Description.Uniform
 import Oxymoron.Description.Symbol (AChar(..), Symbol(..))
 

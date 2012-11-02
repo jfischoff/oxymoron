@@ -28,6 +28,7 @@
 module Oxymoron.Description (
     Attribute(..),
     Color,
+    Position,
     VInt,
     VFloat,
     ValueType(..),

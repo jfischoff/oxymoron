@@ -75,11 +75,11 @@ singletons [d|
     leqVaryingType (B x) (B y)       = leqVaryingBaseType x y
     leqVaryingType (B _) (Array _ _) = False
     leqVaryingType (Array nx vx) (Array ny vy) = 
-            and (leqNat nx ny) (leqVaryingBaseType vx vy)
+            proj (leqNat nx ny) (leqVaryingBaseType vx vy)
     
     leqVarying :: Varying -> Varying -> Bool
     leqVarying (Varying sx vx) (Varying sy vy) = 
-            and (leqSymbol sx sy) (leqVaryingType vx vy) 
+            proj (leqSymbol sx sy) (leqVaryingType vx vy) 
     
     
     insert :: Varying -> [Varying] -> [Varying]
@@ -94,3 +94,17 @@ singletons [d|
     
 type VFloat = 'B 'Float
 type VInt = 'B 'SignedInt
+
+
+
+
+testA = [Varying position $ B Float, Varying color $ B Float]
+testB = [Varying color $ B Float, Varying position $ B Float]
+
+
+
+
+
+
+
+

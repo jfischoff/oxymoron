@@ -12,8 +12,6 @@ import Prelude hiding (and)
 singletons [d|
     -- some predefined types
     -- TODO remove when I have a Quasiquoter for the Symbol type
-    color = Symbol [CC, CO, CL, CO, CR]
-    position = Symbol [CP, CO, CS, CI, CT, CI, CO, CN]
     
     data CoordinateType = C2 | C3 | C4
         deriving(Show, Eq)
@@ -47,7 +45,7 @@ singletons [d|
      
     leqAttribute :: Attribute -> Attribute -> Bool
     leqAttribute (Attribute sx vx cx) (Attribute sy vy cy) =   
-        and (and (leqSymbol sx sy) (leqValueType vx vy)) (leqCoordinateType cx cy)
+        proj (proj (leqSymbol sx sy) (leqValueType vx vy)) (leqCoordinateType cx cy)
     
     insert :: Attribute -> [Attribute] -> [Attribute]
     insert n [] = [n]
