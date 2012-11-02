@@ -39,8 +39,10 @@ So the following will "compile".*
 testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VFloat, 'Varying Position VInt])
 testVertexShader1 = sing
 
+-- Notice that the order is different! Type level sorting FTW!
 testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VInt, 'Varying Color VFloat])
 testFragmentShader1 = sing
+
 --this compiles
 testProgram1 = Program testVertexShader1 testFragmentShader1
 ```
