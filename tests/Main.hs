@@ -29,7 +29,7 @@ testFragmentShader1 = sing
 
 testProgram1 = Program testVertexShader1 testFragmentShader1
 
-testVertexShader2 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': ('[] :: [Varying])))
+testVertexShader2 :: Sing ('VertexShader '[] '[] '[ 'Varying Color VFloat ])
 testVertexShader2 = sing
 
 testFragmentShader2 :: Sing ('FragmentShader 
