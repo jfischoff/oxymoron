@@ -40,7 +40,7 @@ testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VInt, 'Varying 
 testVertexShader1 = sing
 
 -- Notice that the order is different! Type level sorting FTW!
-testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VFloat, 'Varying Color VInt])
+testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VFloat, 'Varying Color VInt] '[])
 testFragmentShader1 = sing
 
 --this compiles
@@ -50,7 +50,7 @@ testProgram1 = Program testVertexShader1 testFragmentShader1
 However, if the types don't match you get compile time error.
 
 ```
-testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VFloat, 'Varying Position VInt])
+testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VFloat, 'Varying Position VInt] '[])
 testFragmentShader2 = sing
 
 --this won't compile
