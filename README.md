@@ -36,11 +36,11 @@ Here is the definition.
 So the following will "compile".* 
 
 ```
-testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VFloat, 'Varying Position VInt])
+testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VInt, 'Varying Position VFloat])
 testVertexShader1 = sing
 
 -- Notice that the order is different! Type level sorting FTW!
-testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VInt, 'Varying Color VFloat])
+testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VFloat, 'Varying Color VInt])
 testFragmentShader1 = sing
 
 --this compiles
@@ -50,7 +50,7 @@ testProgram1 = Program testVertexShader1 testFragmentShader1
 However, if the types don't match you get compile time error.
 
 ```
-testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VInt, 'Varying Position VFloat])
+testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VFloat, 'Varying Position VInt])
 testFragmentShader2 = sing
 
 --this won't compile
@@ -68,10 +68,10 @@ If the idea of type level checking for OpenGL code excites you, find me on irc a
 \* Okay I lied. It will not compile. I have yet to figure out how to use the snazzy type level list literal syntax that you get for [*], for data-kinded lists. Below is the code that will actually compile but the code listed above is more instructive. Hopefully there is a way to use the type level list syntax like I would like.
 
 ```
-testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': 'Varying Position VInt ': ('[] :: [Varying])))
+testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VInt ': 'Varying Position VFloat ': ('[] :: [Varying])))
 testVertexShader1 = sing
 
-testFragmentShader1 :: Sing ('FragmentShader ('Varying Position VInt ': 'Varying Color VFloat ': ('[] :: [Varying])) '[])
+testFragmentShader1 :: Sing ('FragmentShader ('Varying Position VFloat ': 'Varying Color VInt ': ('[] :: [Varying])) '[])
 testFragmentShader1 = sing
 
 testProgram1 = Program testVertexShader1 testFragmentShader1
