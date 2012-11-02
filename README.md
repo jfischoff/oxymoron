@@ -36,22 +36,23 @@ Here is the definition.
 So the following will compile.* 
 
 ```
-    testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VFloat, 'Varying Position VInt])
-    testVertexShader1 = sing
-    
-    testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VInt, 'Varying Color VFloat])
-    testFragmentShader1 = sing
-    -- this compiles
-    testProgram1 = Program testVertexShader1 testFragmentShader1
+testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VFloat, 'Varying Position VInt])
+testVertexShader1 = sing
+
+testFragmentShader1 :: Sing ('FragmentShader ['Varying Position VInt, 'Varying Color VFloat])
+testFragmentShader1 = sing
+--this compiles
+testProgram1 = Program testVertexShader1 testFragmentShader1
 ```
 
 However, if the types don't match you get compile time error.
 
 ```
-    testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VInt, 'Varying Position VFloat])
-    testFragmentShader2 = sing
-    
-    testProgram2 = Program testVertexShader1 testFragmentShader2
+testFragmentShader2 :: Sing ('FragmentShader (['Varying Color VInt, 'Varying Position VFloat])
+testFragmentShader2 = sing
+
+--this won't compile
+testProgram2 = Program testVertexShader1 testFragmentShader2
 ```
 
 That is the basic idea. I have some unfinished code in the Scene folder. Just ignore it for now.
@@ -65,12 +66,10 @@ If the idea of type level checking for OpenGL code excites you, find me on irc a
 * Okay I lied. It will not compile. I have yet to figure out how to use the snazzy type level list literal syntax that you get for [*], for data-kinded lists. Below is the code that will actually compile.
 
 ```
-testVertexShader1 :: Sing ('VertexShader '[] '[] 
-    ('Varying Color VFloat ': 'Varying Position VInt ': ('[] :: [Varying])))
+testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': 'Varying Position VInt ': ('[] :: [Varying])))
 testVertexShader1 = sing
 
-testFragmentShader1 :: Sing ('FragmentShader 
-    ('Varying Position VInt ': 'Varying Color VFloat ': ('[] :: [Varying])) '[])
+testFragmentShader1 :: Sing ('FragmentShader ('Varying Position VInt ': 'Varying Color VFloat ': ('[] :: [Varying])) '[])
 testFragmentShader1 = sing
 
 testProgram1 = Program testVertexShader1 testFragmentShader1
