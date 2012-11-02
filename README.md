@@ -33,7 +33,7 @@ Here is the definition.
                 -> Program a (xs :++ ys) v_output
 ```
 
-So the following will compile.* 
+So the following will "compile".* 
 
 ```
 testVertexShader1 :: Sing ('VertexShader '[] '[] ['Varying Color VFloat, 'Varying Position VInt])
@@ -63,7 +63,7 @@ After I uploaded this I decided to try a more complicated example and noticed th
 
 If the idea of type level checking for OpenGL code excites you, find me on irc as  jfischoff, or email me at jonathangfischoff@gmail.com.
 
-* Okay I lied. It will not compile. I have yet to figure out how to use the snazzy type level list literal syntax that you get for [*], for data-kinded lists. Below is the code that will actually compile.
+\* Okay I lied. It will not compile. I have yet to figure out how to use the snazzy type level list literal syntax that you get for [*], for data-kinded lists. Below is the code that will actually compile but the code above is more instructive, and hopefully syntax that is possible (it is possible for the less type safe version).
 
 ```
 testVertexShader1 :: Sing ('VertexShader '[] '[] ('Varying Color VFloat ': 'Varying Position VInt ': ('[] :: [Varying])))
