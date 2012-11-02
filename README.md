@@ -1,6 +1,6 @@
 # Making OpenGL Programming Safer the Hard Way
 
-Oxymoron is proof of concept library for writing safe(r) OpenGL code.
+Oxymoron is a proof of concept library for writing safe(r) OpenGL code.
 By harnessing the power of singleton types, Oxymoron provides a description of
 GLSL programming (more to come) that, could be, correct by construction (I haven't added all of the OpenGL enumeration and checks yet).
 
