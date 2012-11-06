@@ -61,7 +61,7 @@ That is the basic idea. I have some unfinished code in the Scene folder. Just ig
 
 ## Here Be Dragons
 
-After I uploaded this I decided to try a more complicated example and noticed that I had only covered 3 of 26*26 cases necessary for the leqAChar function. Well that was easy to fix, but my point is I am putting this up halfbaked to get feedback. If you do find an issue add it and I will take care of it.
+After I uploaded this I decided to try a more complicated example and noticed that I had only covered 3 of 26*26 cases necessary for the leqAChar function. Well that was easy to fix, but my point is I am putting this up half baked to get feedback. If you do find an issue add it and I will take care of it.
 
 If the idea of type level checking for OpenGL code excites you, find me on irc as  jfischoff, or email me at jonathangfischoff@gmail.com.
 

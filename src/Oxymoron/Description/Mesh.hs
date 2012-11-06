@@ -15,6 +15,13 @@ singletons [d|
         deriving(Show, Eq)
     data Mesh = Mesh IndexArray [Attribute]
         deriving(Show, Eq)
+        
+    getIndexType :: Mesh -> IndexType
+    getIndexType (Mesh (IndexArray x _) _) = x 
+    
+    getAttributes :: Mesh -> [Attribute]
+    getAttributes (Mesh _ xs) = xs
+    
     |]
 
 -- Hide the index type since it can vary in the renderable and is 

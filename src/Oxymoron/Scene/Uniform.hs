@@ -3,20 +3,22 @@
     FlexibleInstances, ScopedTypeVariables, MultiParamTypeClasses,
     OverlappingInstances, KindSignatures #-}
 module Oxymoron.Scene.Uniform where
-import Oxymoron.Scene.Image
-import Oxymoron.Scene.Core
-import Oxymoron.Scene.Classes
-import Data.Word
-import Graphics.Rendering.OpenGL.Raw
-import GHC.TypeLits (Symbol)
-import qualified GHC.TypeLits as Lits
-import Data.Word
-import Data.Int
+import Oxymoron.Scene.Resource
 import Data.Singletons
+import qualified Oxymoron.Description.Uniform as Desc
+import  Oxymoron.Description.Uniform (UniformType(..), Uniform(..))
 
+newtype Uniform r a = U (R (UniformValue a) r)
 
-data UniformType a = UniformType a (ToUniformValue a)
-type Uniform a b = Reference a (UniformValue b)
+data family UniformValue (a :: Desc.Uniform)
+data instance UniformValue a = VUniform (Sing a) (UniformValue a)
+    
+-- these guys should probably be GADTs    
+data family UniformValueType (a :: Desc.Uniform)
+data instance UniformValueType ('Uniform x 'UTFloat) = UVFloat Float 
+
+--data UniformType a = UniformType a (ToUniformValue a)
+--type Uniform a b = Reference a (UniformValue b)
 
 --instance IsAllocated UTUnsignedInt
 --instance IsAllocated (UTImage Allocated b)

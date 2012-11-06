@@ -1,69 +1,115 @@
-{-# LANGUAGE GADTs, DataKinds, KindSignatures, RankNTypes, MultiParamTypeClasses,
-    TypeSynonymInstances, FlexibleInstances, ExistentialQuantification #-}
+{-# LANGUAGE PolyKinds, DataKinds, TemplateHaskell, TypeFamilies,
+    GADTs, TypeOperators, RankNTypes, FlexibleContexts, UndecidableInstances,
+    FlexibleInstances, ScopedTypeVariables, MultiParamTypeClasses,
+    OverlappingInstances, TemplateHaskell #-}
 module Oxymoron.Scene.Shader where
+import qualified Graphics.Rendering.OpenGL.Raw as GL
+import Graphics.Rendering.OpenGL.Raw (GLint)
+import qualified Oxymoron.Description.Shader as Desc
+import Data.Singletons
 import Language.GLSL.Syntax
-import Graphics.Rendering.OpenGL.Raw
-import Oxymoron.Scene.Classes
-import Oxymoron.Scene.Core
+import Control.Monad.Trans.Region
+import Control.Monad.Trans.Region.OnExit
+import Oxymoron.Scene.Resource
+import Control.Monad.IO.Class ( MonadIO, liftIO )
+import qualified Graphics.Rendering.OpenGL.Raw.Core32 as GL
+import Foreign.Ptr
+import Control.Lens
 
 --ShaderDesc :: 
-singletons [d| data ShaderType = Vertex Desc.VertexShader | Fragment Desc.FragmentShader deriving (Show, Eq, Ord) |]
+---singletons [d| data ShaderType = Vertex Desc.VertexShader | Fragment Desc.FragmentShader deriving (Show, Eq, Ord) |]
 
-data ShaderFlavour = Parsed | Sourced  
-data ShaderState   = ShaderCreated | Moved | Compiled | ShaderDestroyed
-
--- Ideally this would be different and I would
--- have an AST for the GLSL code that was typed in
--- the same way as the description, but for now
--- I am faking it.
--- either String or TranslationUnit    
-data ShaderValue :: ShaderType -> ShaderFlavour -> * where 
-    ShaderValue :: a (If (b ~ 'Parsed) TranslationUnit String) :: ShaderValue a b
+singletons [d| 
+    data ShaderState   = Created | Moved | Compiled 
+    data ShaderFlavour = AST | Sourced 
+    data ShaderComponent = Vertex | Fragment |]
     
---I probably want to make a seperate vertex shader so I can convert to a 
---so I can have an attribute type that can be bound
--
 
-type ShaderResource a b c = Resource a (ShaderValue b c)     
+singletons [d| 
+    data ShaderType = ShaderType Desc.Shader ShaderFlavour ShaderComponent
 
-data Shader :: ShaderType -> ShaderFlavour -> ShaderState -> * where 
-    ShaderCreate  :: ShaderResource Allocated a b   -> Shader a b ShaderCreated  
-    ShaderMove    :: Shader a b ShaderCreated       -> Shader a b Moved          
-    ShaderCompile :: Shader a b Moved               -> Shader a b Compiled       
-    ShaderDestroy :: ShaderResource Unallocated a b -> Shader a b ShaderDestroyed
+    getFlavour :: ShaderType -> ShaderFlavour
+    getFlavour (ShaderType _ x _) = x
     
-type VertexShader   a b c = Shader a (Vertex b)   c
-type FragmentShader a b c = Shader a (Fragment b) c
+    getDesc :: ShaderType -> Desc.Shader
+    getDesc (ShaderType x _ _) = x
 
-{-    
-data AnyShaderState a b = forall c. AnyShaderState (Shader a b c)
+    |]
+
+data Sources = Sources {
+        _count   :: GL.GLsizei,
+        _strings :: Ptr (Ptr GL.GLchar), 
+        _lengths :: Ptr GLint
+    }
+
+makeLenses ''Sources
+
+data ShaderInfo :: ShaderType -> * where
+    ShaderInfo :: Sing a 
+               -> If ((GetFlavour a) :==: 'AST) TranslationUnit Sources
+               -> ShaderInfo a
+
+
+data Shader :: ShaderType
+                  -> ShaderState
+                  -> (* -> *) 
+                  -> * where
+    Shader :: R (ShaderInfo a) r
+                 -> SShaderState s 
+                 -> Shader a s r
+                 
+shaderState :: Lens (Shader a b c) 
+                    (Shader a z c) 
+                    (SShaderState b)
+                    (SShaderState z) 
+shaderState = error "shaderState"
+
+
+sources :: Lens (Shader ('ShaderType a 'Sourced e) b c) 
+                (Shader ('ShaderType a 'Sourced e) b c) 
+                Sources
+                Sources
+sources = error "sources"     
+
+shaderId = error "shaderId"   
+
+shaderComp = error "shaderComp"
+glEnum = error "glEnum"
+
+--TODO refactor so type is part of the shader
+--Fix this and then make sure the whole pipeline can compile
+--or something like that 
+glCreateShader :: MonadIO pr 
+               => ShaderInfo a 
+               -> RegionT s pr (Shader a 'Created (RegionT s pr))
+glCreateShader x = do
+    shaderId <- liftIO $ GL.glCreateShader $ x^.shaderComp^.glEnum
+    fin      <- onExit $ GL.glDeleteShader shaderId
+    return $ Shader (R x shaderId fin) SCreated            
+
+glShaderSource :: (a ~ ('ShaderType z 'Sourced e), 
+                  AncestorRegion pr cr,
+                  MonadIO cr) 
+               => Shader a b pr 
+               -> cr (Shader a Moved pr)
+glShaderSource x = do 
+    let shaderId'      = x^.shaderId
+        sourcesCount   = x^.sources.count
+        sourcesStrings = x^.sources.strings
+        sourcesLengths = x^.sources.lengths
+        
+    liftIO $ GL.glShaderSource shaderId' sourcesCount sourcesStrings sourcesLengths
+    return $ set shaderState SMoved x
     
-instance (Monad m) => GLTransition m (AnyShaderState a b) where
-    glStep (AnyShaderState r) = case r of
-        ShaderCreate y -> return . AnyShaderState . ShaderMove    . ShaderCreate $ y
-        ShaderMove   y -> return . AnyShaderState . ShaderCompile . ShaderMove   $ y
-        _              -> return . AnyShaderState $ r
--}
 
-
-{-
-    
-createVertexShader :: OpenGL m => Shader a Sourced -> m (VertexShader Created)
-createVertexShader = undefined
-
-createFragmentShader :: OpenGL m => Shader a Sourced -> m (FragmentShader Created)
-createFragmentShader = undefined
-
-compileShader :: OpenGL m => Shader a Created -> m (Shader a Compiled)
-compileShader x = undefined
-    
-prettyPrintShader :: Shader a Parsed -> Shader a Sourced
-prettyPrintShader = undefined
-
-parseShader :: Shader a Sourced -> Shader a Parsed
-parseShader = undefined
+glShaderCompile :: (AncestorRegion pr cr, MonadIO cr)
+                => Shader a Moved pr 
+                -> cr (Shader a Compiled pr) 
+glShaderCompile = undefined    
 
 
 
--}
+
+
+
     

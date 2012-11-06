@@ -55,5 +55,12 @@ singletons [d|
     insertionSort [] = []
     insertionSort (h:t) = insert h (insertionSort t)
     
+    --TODO make this work!
+    findAttr :: Symbol -> [Attribute] -> Maybe Attribute
+    findAttr n (x:xs) = Nothing
+    
+    fromJust :: Maybe a -> a
+    fromJust (Just a) = a
+    
     |]
 

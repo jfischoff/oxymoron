@@ -12,6 +12,6 @@ import Oxymoron.Description.Program
 --The material functions as a cache of the uniform values for the program
 --It doesn't add anything in terms of type info (for now), but constitency I've
 --added it.
-data Material :: [Attribute] -> [Uniform] -> [Varying] -> * where
-  Material :: Program a b c -> Material a b c
+data Material :: [Attribute] -> [Uniform] -> [Uniform] -> [Varying] -> * where
+  Material :: Program a b c d -> Material a b c d
 

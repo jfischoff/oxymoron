@@ -8,8 +8,8 @@ import Data.Singletons
 
 singletons [d| 
     -- TODO actually fill this out
-    data UniformType = Blah
+    data UniformType = UTFloat
         deriving(Show, Eq)
-    data Uniform = UniformDesc Symbol UniformType
+    data Uniform = Uniform Symbol UniformType
         deriving(Show, Eq)
     |]
