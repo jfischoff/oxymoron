@@ -12,8 +12,6 @@ import Oxymoron.Description.Uniform
 import Oxymoron.Description.Symbol (AChar(..), Symbol(..))
 
 
-
-
 -- The outputs must match the inputs 
 data Program :: [Attribute] -> [Uniform] -> [Uniform] -> [Varying] -> * where
   Program :: (((InsertionSort v_output) :==: (InsertionSort s_input)) ~ 'True) 

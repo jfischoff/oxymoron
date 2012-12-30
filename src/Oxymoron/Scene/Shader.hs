@@ -16,13 +16,17 @@ import qualified Graphics.Rendering.OpenGL.Raw.Core32 as GL
 import Foreign.Ptr
 import Control.Lens
 
---ShaderDesc :: 
----singletons [d| data ShaderType = Vertex Desc.VertexShader | Fragment Desc.FragmentShader deriving (Show, Eq, Ord) |]
+--I need to refactor this so that it doesn't use states
+--so what is a shader?
+--it is the a description, flavor, component, and resource
+--I am pretty sure. 
 
 singletons [d| 
     data ShaderState   = Created | Moved | Compiled 
     data ShaderFlavour = AST | Sourced 
-    data ShaderComponent = Vertex | Fragment |]
+    data ShaderComponent = Vertex | Fragment 
+    
+    |]
     
 
 singletons [d| 
@@ -76,9 +80,9 @@ shaderId = error "shaderId"
 shaderComp = error "shaderComp"
 glEnum = error "glEnum"
 
---TODO refactor so type is part of the shader
---Fix this and then make sure the whole pipeline can compile
---or something like that 
+-- I need to add shaders to the enviroment when ever I make them
+
+{-
 glCreateShader :: MonadIO pr 
                => ShaderInfo a 
                -> RegionT s pr (Shader a 'Created (RegionT s pr))
@@ -100,12 +104,9 @@ glShaderSource x = do
         
     liftIO $ GL.glShaderSource shaderId' sourcesCount sourcesStrings sourcesLengths
     return $ set shaderState SMoved x
-    
+-}
 
-glShaderCompile :: (AncestorRegion pr cr, MonadIO cr)
-                => Shader a Moved pr 
-                -> cr (Shader a Compiled pr) 
-glShaderCompile = undefined    
+
 
 
 

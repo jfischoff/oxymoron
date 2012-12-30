@@ -12,14 +12,9 @@ import Control.Monad.Trans.Region
 import Control.Monad.IO.Class ( MonadIO, liftIO )
 
 singletons [d| 
-    data AttributeState = Created | Bound 
     data AttributeInfo = AttributeInfo AttributeState Desc.Attribute
     
      |]
-
-data Attribute :: AttributeState -> (* -> *) -> Desc.Attribute -> * where
-     CreateAttribute :: Sing ('AttributeInfo a c) -> Attribute 'Created b c
-     BindAttribute   :: SR ('AttributeInfo a c) b -> Attribute 'Bound b c
 
 
 --glGetAttribLocation :: (AncestorRegion pr cr, MonadIO cr) 

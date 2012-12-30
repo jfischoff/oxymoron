@@ -34,7 +34,17 @@ testFragmentShader2 :: Sing ('FragmentShader '[ 'Varying Position VInt, 'Varying
 testFragmentShader2 = sing
 
 --testProgram2 = Program testVertexShader1 testFragmentShader2
-
+singletons [d| data TestValue = Test1
+                              | Test2
+                              | Test3
+                         deriving(Eq, Show)
+                         
+               data TestKey = Key1
+                             | Key2
+                             | Key3
+                             deriving(Eq, Show)
+                         
+                         |]
 
 
 testMesh0 :: Sing (ExMesh ('[] :: [Attribute]) ': 
@@ -54,3 +64,38 @@ testMaterial0 = undefined
 
 testRenderable0 = Renderable testMesh0 testMaterial0
 --testRenderable1 = Renderable testMesh1 testMaterial0
+
+
+test :: ((a :==: b) ~ True) => Sing (a :: AssocArray k v) -> Sing (b :: AssocArray k v) -> Int
+test = undefined
+
+
+
+testA :: Sing ('AssocArray '[ '( 'Key1, 'Test3 ),
+                             '( 'Key2, 'Test2 )])
+testA = undefined
+                          
+testB :: Sing ('AssocArray '[ '( 'Key2, 'Test2),
+                             '( 'Key1, 'Test3)])
+testB = undefined
+
+testC :: Sing ('AssocArray '[ '( 'Key2, 'Test3) ])
+testC = undefined
+
+
+-- Order is different but it still compiles
+test1 = test testA testB
+
+testKey :: Sing 'Key1
+testKey = sing
+
+testValue :: Sing ('Just 'Test1)
+testValue = sing
+
+findTester :: (Lookup key array ~ Just value) 
+           => Sing (key :: k) 
+           -> Sing (array :: AssocArray k v)
+           -> Sing (value :: v)
+findTester = undefined      
+
+findTest = findTester testKey testA

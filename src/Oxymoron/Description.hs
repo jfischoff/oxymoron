@@ -43,7 +43,7 @@ module Oxymoron.Description (
     Uniform(..),
     Varying(..),
     VertexShader(..),
-    ExMesh(..)
+    ExMesh(..),
     ) where
 import Oxymoron.Description.Attribute
 import Oxymoron.Description.FragmentShader

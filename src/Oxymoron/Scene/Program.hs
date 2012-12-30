@@ -105,7 +105,7 @@ instance AttachShader (Program a b c d ('FragmentAttached fs))
     glAttachShader :: (AncestorRegion pr cr, MonadIO cr)
                    => Program a b c d ('FragmentAttached fs) pr
                    -> S.VertexShader ('VertexShader a b d) vs pr
-                   -> cr (Program a b c d ('Attached vs fs) pr)
+                   -> cr (Program a b c d ('Attached vs fs) r)
     glAttachShader = undefined
 
 glLinkProgram :: (AncestorRegion pr cr, MonadIO cr) 
