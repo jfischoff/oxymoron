@@ -38,7 +38,7 @@ module Oxymoron.Description (
     Material(..),
     Mesh(..),
     Program(..),
-    Renderable(..),
+--    Renderable(..),
     Symbol(..),
     Uniform(..),
     Varying(..),

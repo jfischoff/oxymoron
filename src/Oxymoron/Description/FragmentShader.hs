@@ -4,13 +4,17 @@
     OverlappingInstances #-}
 module Oxymoron.Description.FragmentShader where
 import Data.Singletons
+import Data.Singletons.Extras.Set
 import Oxymoron.Description.Uniform
 import Oxymoron.Description.Varying
 import Oxymoron.Description.Symbol
 
 -- TODO and fragment shader outputs (render targets)
-singletons [d| data FragmentShader = FragmentShader [Varying] [Uniform] 
-                    deriving(Show, Eq)|] 
+singletons [d| 
+   data FragmentShader = FragmentShader (Set Varying) (Set Uniform) 
+      deriving (Show, Eq) 
+   
+   |] 
     
 
 

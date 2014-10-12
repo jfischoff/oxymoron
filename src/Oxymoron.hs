@@ -3,5 +3,5 @@ module Oxymoron (
 ) where
 
 import Oxymoron.Description
-    
+import Oxymoron.Scene
 

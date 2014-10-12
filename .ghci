@@ -1,2 +1,2 @@
 :set -i./src -i./tests
-:load src/Oxymoron/Regions/TAssociativeArray.hs
+:load src/Oxymoron.hs

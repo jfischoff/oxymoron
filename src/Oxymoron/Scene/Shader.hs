@@ -7,10 +7,6 @@ import qualified Graphics.Rendering.OpenGL.Raw as GL
 import Graphics.Rendering.OpenGL.Raw (GLint)
 import qualified Oxymoron.Description.Shader as Desc
 import Data.Singletons
-import Language.GLSL.Syntax
-import Control.Monad.Trans.Region
-import Control.Monad.Trans.Region.OnExit
-import Oxymoron.Scene.Resource
 import Control.Monad.IO.Class ( MonadIO, liftIO )
 import qualified Graphics.Rendering.OpenGL.Raw.Core32 as GL
 import Foreign.Ptr
@@ -50,27 +46,26 @@ makeLenses ''Sources
 
 data ShaderInfo :: ShaderType -> * where
     ShaderInfo :: Sing a 
-               -> If ((GetFlavour a) :==: 'AST) TranslationUnit Sources
+               -> Sources
                -> ShaderInfo a
 
 
 data Shader :: ShaderType
                   -> ShaderState
-                  -> (* -> *) 
                   -> * where
-    Shader :: R (ShaderInfo a) r
+    Shader :: ShaderInfo a
                  -> SShaderState s 
-                 -> Shader a s r
+                 -> Shader a s
                  
-shaderState :: Lens (Shader a b c) 
-                    (Shader a z c) 
+shaderState :: Lens (Shader a b ) 
+                    (Shader a z ) 
                     (SShaderState b)
                     (SShaderState z) 
 shaderState = error "shaderState"
 
 
-sources :: Lens (Shader ('ShaderType a 'Sourced e) b c) 
-                (Shader ('ShaderType a 'Sourced e) b c) 
+sources :: Lens (Shader ('ShaderType a 'Sourced e) b ) 
+                (Shader ('ShaderType a 'Sourced e) b ) 
                 Sources
                 Sources
 sources = error "sources"     

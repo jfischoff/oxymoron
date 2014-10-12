@@ -6,13 +6,11 @@ module Oxymoron.Scene.Attribute where
 import qualified Oxymoron.Description.Attribute as Desc
 import Graphics.Rendering.OpenGL.Raw
 import Data.Singletons
-import Oxymoron.Scene.Resource
 import Oxymoron.Description.Program
-import Control.Monad.Trans.Region
-import Control.Monad.IO.Class ( MonadIO, liftIO )
 
 singletons [d| 
-    data AttributeInfo = AttributeInfo AttributeState Desc.Attribute
+    data AttributeState = Bound | Created
+    data AttributeInfo  = AttributeInfo AttributeState Desc.Attribute
     
      |]
 

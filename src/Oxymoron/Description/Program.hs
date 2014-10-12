@@ -10,14 +10,16 @@ import Oxymoron.Description.Varying
 import Oxymoron.Description.Attribute (Attribute(..))
 import Oxymoron.Description.Uniform
 import Oxymoron.Description.Symbol (AChar(..), Symbol(..))
+import Data.Singletons.Extras.Set
 
+-- I think I can make a type level set
 
 -- The outputs must match the inputs 
-data Program :: [Attribute] -> [Uniform] -> [Uniform] -> [Varying] -> * where
-  Program :: (((InsertionSort v_output) :==: (InsertionSort s_input)) ~ 'True) 
-          => Sing ('VertexShader a xs v_output) 
-          -> Sing ('FragmentShader s_input ys) 
-          -> Program a xs ys v_output  
+data Program :: Set Attribute -> Set Uniform -> Set Uniform -> Set Varying -> * where
+  Program :: (( output :==: input ) ~ 'True) 
+          => Sing ('VertexShader a xs output) 
+          -> Sing ('FragmentShader input ys)
+          -> Program a xs ys output  
           
           -- TODO get rid of the duplicate Uniforms
           

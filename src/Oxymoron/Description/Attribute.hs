@@ -4,18 +4,24 @@
     FlexibleInstances, ScopedTypeVariables, MultiParamTypeClasses,
     OverlappingInstances #-}
 module Oxymoron.Description.Attribute where
-import Oxymoron.Description.Symbol hiding (insertionSort, insert, 
-    Insert, InsertionSort, sInsert, sInsertionSort)
+--import Oxymoron.Description.Symbol hiding (insertionSort, insert, 
+--    Insert, InsertionSort, sInsert, sInsertionSort)
 import Data.Singletons
+import Data.Singletons.Extras hiding ( insertionSort
+                                     , InsertionSort
+                                     , Insert
+                                     , sInsertionSort
+                                     , sInsert
+                                     )
 import Prelude hiding (and)
+import Data.Word
+import Data.Int
 
 singletons [d|
-    -- some predefined types
-    -- TODO remove when I have a Quasiquoter for the Symbol type
     
     data CoordinateType = C2 | C3 | C4
         deriving(Show, Eq)
-    data ValueType      = VTByte | VTShort | VTFloat
+    data ValueType = VTByte | VTShort | VTFloat
         deriving(Show, Eq)
     data Attribute = Attribute Symbol ValueType CoordinateType
         deriving(Show, Eq)
@@ -64,3 +70,14 @@ singletons [d|
     
     |]
 
+type instance ToUnpacked ('Attribute x 'VTByte 'C2) = (Word8, Word8)
+type instance ToUnpacked ('Attribute x 'VTByte 'C3) = (Word8, Word8, Word8)
+type instance ToUnpacked ('Attribute x 'VTByte 'C4) = (Word8, Word8, Word8, Word8)
+
+type instance ToUnpacked ('Attribute x 'VTShort 'C2) = (Int16, Int16)
+type instance ToUnpacked ('Attribute x 'VTShort 'C3) = (Int16, Int16, Int16)
+type instance ToUnpacked ('Attribute x 'VTShort 'C4) = (Int16, Int16, Int16, Int16)
+
+type instance ToUnpacked ('Attribute x 'VTFloat 'C2) = (Float, Float)
+type instance ToUnpacked ('Attribute x 'VTFloat 'C3) = (Float, Float, Float)
+type instance ToUnpacked ('Attribute x 'VTFloat 'C4) = (Float, Float, Float, Float)
